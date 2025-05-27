@@ -16,3 +16,11 @@ Content-Type: application/json
 ###
 
 # @name Authenticate
+POST {{baseUrl}}/sessions
+Content-Type: application/json
+
+{
+    "cpf": "12345678912",
+    "password": "123456",
+
+}
