@@ -69,4 +69,5 @@ enum UserRole {
   admin
   recipient
   deliveryman
+  common
 }
