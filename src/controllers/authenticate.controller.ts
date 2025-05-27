@@ -43,10 +43,10 @@ export class AuthenticateController {
       throw new UnauthorizedException("user credentials do not match");
     }
 
-    const acessToken = this.jwt.sign({ sub: user.id, role: user.role });
+    const accessToken = this.jwt.sign({ sub: user.id, role: user.role });
 
     return {
-      access_token: acessToken,
+      access_token: accessToken,
     };
   }
 }

@@ -1,12 +1,14 @@
 @baseUrl = http://localhost:3333
+@authToken = {{Authenticate.response.body.access_token}}
+
 
 # @name Create_account
 POST {{baseUrl}}/accounts
 Content-Type: application/json
 
 {
-    "name": "samuel molinari",
-    "cpf": "12345678912",
+    "name": "samuel molinari para authenticar",
+    "cpf": "12431231231",
     "password": "123456",
     "role": "admin",
     "type": "deliveryman"
@@ -20,7 +22,20 @@ POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 {
-    "cpf": "12345678912",
-    "password": "123456",
-
+    "cpf": "12431231231",
+    "password": "123456"
 }
+
+###
+
+# @name Create_deliveryman
+
+POST {{baseUrl}}/deliveryman
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "userId": "6e4a1f3c-a1b9-41da-b00e-035831345243"
+}
+
+

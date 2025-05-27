@@ -10,7 +10,7 @@ const createAccountBodySchema = z.object({
   name: z.string(),
   cpf: z.string().min(11).max(11),
   password: z.string(),
-  role: z.enum(["admin", "common"]),
+  role: z.enum(["admin", "recipient", "deliveryman"]),
   type: z.enum(["deliveryman", "recipient"]),
 });
 
