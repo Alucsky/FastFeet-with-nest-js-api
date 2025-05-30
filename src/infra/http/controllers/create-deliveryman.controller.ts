@@ -1,11 +1,10 @@
+import { JwtAuthGuard } from "@/infra/auth/jwt-auth.guard";
 import { ConflictException, UseGuards, UsePipes } from "@nestjs/common";
 import { Body, Controller, HttpCode, Post } from "@nestjs/common";
-import { CurrentUser } from "src/auth/current-user-decorator";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { UserPayload } from "src/auth/jwt.strategy";
-import { ZodValidationPipe } from "src/pipes/zod-validation-pipe";
-import { PrismaService } from "src/prisma/prisma.service";
+
 import { z } from "zod";
+import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
+import { PrismaService } from "@/infra/prisma/prisma.service";
 
 const createDeliverymanBodySchema = z.object({
   userId: z.string(),
@@ -19,10 +18,7 @@ export class CreateDeliverymanController {
   constructor(private prisma: PrismaService) {}
   @Post()
   @HttpCode(201)
-  async handle(
-    @Body(validationBodyPipe) body: CreateDeliverymanBodySchema,
-    @CurrentUser() userPayload: UserPayload
-  ) {
+  async handle(@Body(validationBodyPipe) body: CreateDeliverymanBodySchema) {
     const { userId } = createDeliverymanBodySchema.parse(body);
 
     const user = await this.prisma.user.findUnique({
