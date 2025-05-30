@@ -3,51 +3,40 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" 
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id                   String     @id @default(uuid())
-  cpf                  String     @unique
-  password             String
-  name                 String
-  type                 UserType
-  role                 UserRole
-  addressId            String?
-  address              Address?   @relation(fields: [addressId], references: [id])
-  deliveriesSent       Delivery[] @relation("DeliverySender")
-  deliveriesReceived   Delivery[] @relation("DeliveryRecipient")
-
-  @@map("users")
+enum UserType {
+  ADMIN
+  DELIVERYMAN
+  RECIPIENT
 }
 
 enum DeliveryStatus {
   PENDING
-  PICKED_UP
+  IN_PROGRESS
   DELIVERED
+  CANCELED
 }
 
-model Delivery {
-  id            String         @id @default(uuid())
-  deliverymanId String?        
-  recipientId   String         
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  cpf       String     @unique
+  password  String
+  userType  UserType
+  role      UserType
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 
-  neighborhood  String
-  status        DeliveryStatus
-  postedAt      DateTime
-  pickedUpAt    DateTime?       
-  deliveredAt   DateTime?       
-
-  deliveryman   User?           @relation("DeliverySender", fields: [deliverymanId], references: [id])
-  recipient     User            @relation("DeliveryRecipient", fields: [recipientId], references: [id])
-
-  @@map("deliveries")
+  deliveryman Deliveryman?
+  recipient   Recipient?
 }
 
 
 model Address {
-  id           String @id @default(uuid())
+  id           String     @id @default(uuid())
   street       String
   number       String
   neighborhood String
@@ -55,19 +44,43 @@ model Address {
   postalCode   String
   state        String
 
-  users        User[]
-
-  @@map("addresses")
+  recipient    Recipient?
+  deliveries   Delivery[]
 }
 
-enum UserType {
-  deliveryman
-  recipient
+model Recipient {
+  id        String @id @default(uuid())
+  userId    String @unique
+  user      User   @relation(fields: [userId], references: [id])
+  addressId String @unique
+  address   Address @relation(fields: [addressId], references: [id])
+  
+  deliveries Delivery[]
 }
 
-enum UserRole {
-  admin
-  recipient
-  deliveryman
-  common
+
+model Deliveryman {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  deliveries Delivery[]
+}
+
+
+model Delivery {
+  id            String         @id @default(uuid())
+  name          String
+  status        DeliveryStatus @default(PENDING)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  recipientId   String
+  recipient     Recipient       @relation(fields: [recipientId], references: [id])
+
+  deliverymanId String?
+  deliveryman   Deliveryman?    @relation(fields: [deliverymanId], references: [id])
+
+  addressId     String
+  address       Address         @relation(fields: [addressId], references: [id])
 }
