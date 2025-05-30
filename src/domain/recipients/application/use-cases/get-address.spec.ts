@@ -1,7 +1,7 @@
-import { InMemoryAddressRepository } from "test/repositories/in-memory-addres-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { Address } from "../../enterprise/entities/address";
 import { GetAddressUseCase } from "./get-address";
+import { InMemoryAddressRepository } from "../../../../../test/repositories/in-memory-addres-repository";
 
 let inMemoryAddressRepository: InMemoryAddressRepository;
 let sut: GetAddressUseCase;

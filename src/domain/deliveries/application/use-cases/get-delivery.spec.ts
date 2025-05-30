@@ -1,7 +1,7 @@
-import { InMemoryDeliveryRepository } from "test/repositories/in-memory-delivery-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
-import { makeDelivery } from "test/factories/make-delivery";
 import { GetDeliveryUseCase } from "./get-delivery";
+import { InMemoryDeliveryRepository } from "../../../../../test/repositories/in-memory-delivery-repository";
+import { makeDelivery } from "../../../../../test/factories/make-delivery";
 
 let inMemoryDeliveryRepository: InMemoryDeliveryRepository;
 let sut: GetDeliveryUseCase;
