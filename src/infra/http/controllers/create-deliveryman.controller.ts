@@ -4,7 +4,7 @@ import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
-import { PrismaService } from "@/infra/prisma/prisma.service";
+import { PrismaService } from "@/infra/database/prisma/prisma.service";
 
 const createDeliverymanBodySchema = z.object({
   userId: z.string(),
