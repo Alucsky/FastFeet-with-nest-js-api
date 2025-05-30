@@ -32,6 +32,8 @@ model User {
 
   deliveryman Deliveryman?
   recipient   Recipient?
+
+  @@map("users")
 }
 
 
@@ -46,6 +48,9 @@ model Address {
 
   recipient    Recipient?
   deliveries   Delivery[]
+
+  @@map("addresses")
+
 }
 
 model Recipient {
@@ -56,6 +61,9 @@ model Recipient {
   address   Address @relation(fields: [addressId], references: [id])
   
   deliveries Delivery[]
+
+  @@map("recipients")
+
 }
 
 
@@ -65,6 +73,9 @@ model Deliveryman {
   user   User   @relation(fields: [userId], references: [id])
 
   deliveries Delivery[]
+
+  @@map("deliverymans")
+
 }
 
 
@@ -83,4 +94,7 @@ model Delivery {
 
   addressId     String
   address       Address         @relation(fields: [addressId], references: [id])
+
+  @@map("deliveries")
+
 }
