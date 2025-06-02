@@ -1,6 +1,6 @@
 import { User } from "../../enterprise/entities/user";
 
-export interface UsersRepository {
-  findById(id: string): Promise<User | null>;
-  findByCpf(cpf: string): Promise<User | null>;
+export abstract class UsersRepository {
+  abstract findById(id: string): Promise<User | null>;
+  abstract findByCpf(cpf: string): Promise<User | null>;
 }

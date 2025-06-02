@@ -1,8 +1,8 @@
 import { Address } from "../../enterprise/entities/address";
 
-export interface AddressRepository {
-  create(address: Address): Promise<Address>;
-  findById(addressId: string): Promise<Address | null>;
-  update(address: Address): Promise<Address>;
-  delete(addressId: string): Promise<void>;
+export abstract class AddressRepository {
+  abstract create(address: Address): Promise<Address>;
+  abstract findById(addressId: string): Promise<Address | null>;
+  abstract update(address: Address): Promise<Address>;
+  abstract delete(addressId: string): Promise<void>;
 }
