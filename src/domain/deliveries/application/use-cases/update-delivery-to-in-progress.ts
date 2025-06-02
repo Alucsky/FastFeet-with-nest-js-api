@@ -4,6 +4,7 @@ import { DeliveryRepository } from "../repositories/delivery-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { DeliverymanRepository } from "../repositories/deliveryman-repository";
+import { Injectable } from "@nestjs/common";
 
 interface UpdateDeliveryToInProgressUseCaseRequest {
   deliverymanId: string;
@@ -16,13 +17,12 @@ type UpdateDeliveryToInProgressUseCaseResponse = Either<
     delivery: Delivery;
   }
 >;
-
+@Injectable()
 export class UpdateDeliveryToInProgressUseCase {
   constructor(
     private deliveryRepository: DeliveryRepository,
     private deliverymanRepository: DeliverymanRepository
   ) {}
-
   async execute({
     deliverymanId,
     deliveryId,
@@ -39,7 +39,6 @@ export class UpdateDeliveryToInProgressUseCase {
     if (!deliveryman) {
       return left(new ResourceNotFoundError());
     }
-    
 
     delivery.deliverymanId = deliveryman.id;
     delivery.status = DeliveryStatus.IN_PROGRESS;

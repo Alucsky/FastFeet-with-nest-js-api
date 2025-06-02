@@ -3,6 +3,7 @@ import { DeliveryRepository } from "../repositories/delivery-repository";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { Delivery, DeliveryStatus } from "../../enterprise/entities/delivery";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Injectable } from "@nestjs/common";
 
 interface FetchRecentDeliveriesByDeliverymanUseCaseRequest {
   deliverymanId: string;
@@ -19,7 +20,7 @@ type FetchRecentDeliveriesByDeliverymanUseCaseResponse = Either<
     deliveries: Delivery[];
   }
 >;
-
+@Injectable()
 export class FetchRecentDeliveriesByDeliverymanUseCase {
   constructor(private deliveryRepository: DeliveryRepository) {}
 

@@ -5,6 +5,7 @@ import { RecipientWithPassword } from "../../enterprise/entities/value-objects/r
 import { RecipientRepository } from "../repositories/recipient-repository";
 import { HashGenerator } from "@/domain/authentication/application/cryptography/hash-generator";
 import { UserAlreadyExistsError } from "@/core/errors/errors/user-already-exists-error";
+import { Injectable } from "@nestjs/common";
 
 interface CreateRecipientUseCaseRequest {
   name: string;
@@ -18,39 +19,41 @@ type CreateRecipientUseCaseResponse = Either<
     recipient: Recipient;
   }
 >;
+  @Injectable()
+  export class CreateRecipientUseCase {
+    constructor(
+      private recipientRepository: RecipientRepository,
+      private hashGenerator: HashGenerator
+    ) {}
 
-export class CreateRecipientUseCase {
-  constructor(
-    private recipientRepository: RecipientRepository,
-    private hashGenerator: HashGenerator
-  ) {}
-
-  async execute({
-    name,
-    cpf,
-    password,
-  }: CreateRecipientUseCaseRequest): Promise<CreateRecipientUseCaseResponse> {
-    const passwordHash = await this.hashGenerator.hash(password);
-
-    const recipientWithSameCpf = await this.recipientRepository.findByCpf(cpf);
-
-    if (recipientWithSameCpf) {
-      return left(new UserAlreadyExistsError(cpf));
-    }
-
-    const recipientWithPassword = RecipientWithPassword.create({
+    async execute({
       name,
       cpf,
-      password: passwordHash,
-      id: new UniqueEntityID(),
-    });
+      password,
+    }: CreateRecipientUseCaseRequest): Promise<CreateRecipientUseCaseResponse> {
+      const passwordHash = await this.hashGenerator.hash(password);
 
-    const recipient = await this.recipientRepository.create(
-      recipientWithPassword
-    );
+      const recipientWithSameCpf = await this.recipientRepository.findByCpf(
+        cpf
+      );
 
-    return right({
-      recipient,
-    });
+      if (recipientWithSameCpf) {
+        return left(new UserAlreadyExistsError(cpf));
+      }
+
+      const recipientWithPassword = RecipientWithPassword.create({
+        name,
+        cpf,
+        password: passwordHash,
+        id: new UniqueEntityID(),
+      });
+
+      const recipient = await this.recipientRepository.create(
+        recipientWithPassword
+      );
+
+      return right({
+        recipient,
+      });
+    }
   }
-}

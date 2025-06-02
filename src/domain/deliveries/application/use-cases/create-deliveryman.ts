@@ -5,6 +5,7 @@ import { Deliveryman } from "../../enterprise/entities/deliveryman";
 import { DeliverymanWithPassword } from "../../enterprise/entities/value-objects/deliveryman-with-password";
 import { HashGenerator } from "@/domain/authentication/application/cryptography/hash-generator";
 import { UserAlreadyExistsError } from "@/core/errors/errors/user-already-exists-error";
+import { Injectable } from "@nestjs/common";
 
 interface CreateDeliverymanUseCaseRequest {
   name: string;
@@ -18,7 +19,7 @@ type CreateDeliverymanUseCaseResponse = Either<
     deliveryman: Deliveryman;
   }
 >;
-
+@Injectable()
 export class CreateDeliverymanUseCase {
   constructor(
     private deliverymanRepository: DeliverymanRepository,

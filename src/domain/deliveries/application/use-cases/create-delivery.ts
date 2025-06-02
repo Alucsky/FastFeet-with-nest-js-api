@@ -2,6 +2,7 @@ import { Either, right } from "@/core/either";
 import { Delivery } from "../../enterprise/entities/delivery";
 import { DeliveryRepository } from "../repositories/delivery-repository";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
+import { Injectable } from "@nestjs/common";
 
 interface CreateDeliveryUseCaseRequest {
   addressId: string;
@@ -15,7 +16,7 @@ type CreateDeliveryUseCaseResponse = Either<
     delivery: Delivery;
   }
 >;
-
+@Injectable()
 export class CreateDeliveryUseCase {
   constructor(private deliveryRepository: DeliveryRepository) {}
 

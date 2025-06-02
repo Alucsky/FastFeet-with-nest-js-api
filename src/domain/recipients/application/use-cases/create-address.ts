@@ -3,6 +3,7 @@ import { Address } from "../../enterprise/entities/address";
 import { AddressRepository } from "../repositories/address-repository";
 import { RecipientRepository } from "../repositories/recipient-repository";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
+import { Injectable } from "@nestjs/common";
 
 interface CreateAddressUseCaseRequest {
   recipientId: string;
@@ -20,45 +21,45 @@ type CreateAddressUseCaseResponse = Either<
     address: Address;
   }
 >;
+  @Injectable()
+  export class CreateAddressUseCase {
+    constructor(
+      private addressRepository: AddressRepository,
+      private recipientRepository: RecipientRepository
+    ) {}
 
-export class CreateAddressUseCase {
-  constructor(
-    private addressRepository: AddressRepository,
-    private recipientRepository: RecipientRepository
-  ) {}
-
-  async execute({
-    recipientId,
-    street,
-    number,
-    neighborhood,
-    city,
-    postalCode,
-    state,
-  }: CreateAddressUseCaseRequest): Promise<CreateAddressUseCaseResponse> {
-    const recipient = await this.recipientRepository.findById(recipientId);
-
-    if (!recipient) {
-      return left(new ResourceNotFoundError());
-    }
-
-    const address = Address.create({
+    async execute({
+      recipientId,
       street,
       number,
       neighborhood,
       city,
       postalCode,
       state,
-    });
+    }: CreateAddressUseCaseRequest): Promise<CreateAddressUseCaseResponse> {
+      const recipient = await this.recipientRepository.findById(recipientId);
 
-    await this.addressRepository.create(address);
+      if (!recipient) {
+        return left(new ResourceNotFoundError());
+      }
 
-    recipient.setAddressId = address.id;
+      const address = Address.create({
+        street,
+        number,
+        neighborhood,
+        city,
+        postalCode,
+        state,
+      });
 
-    await this.recipientRepository.update(recipient);
+      await this.addressRepository.create(address);
 
-    return right({
-      address,
-    });
+      recipient.setAddressId = address.id;
+
+      await this.recipientRepository.update(recipient);
+
+      return right({
+        address,
+      });
+    }
   }
-}

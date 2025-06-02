@@ -2,6 +2,7 @@ import { Either, left, right } from "@/core/either";
 import { DeliveryRepository } from "../repositories/delivery-repository";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { Delivery } from "../../enterprise/entities/delivery";
+import { Injectable } from "@nestjs/common";
 
 interface GetDeliveryUseCaseRequest {
   deliveryId: string;
@@ -13,7 +14,7 @@ type GetDeliveryUseCaseResponse = Either<
     delivery: Delivery;
   }
 >;
-
+@Injectable()
 export class GetDeliveryUseCase {
   constructor(private deliveryRepository: DeliveryRepository) {}
 

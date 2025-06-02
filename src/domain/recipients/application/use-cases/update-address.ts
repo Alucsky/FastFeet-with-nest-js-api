@@ -2,6 +2,7 @@ import { Either, left, right } from "@/core/either";
 import { Address } from "../../enterprise/entities/address";
 import { AddressRepository } from "../repositories/address-repository";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
+import { Injectable } from "@nestjs/common";
 
 interface UpdateAddressUseCaseRequest {
   addressId: string;
@@ -19,7 +20,7 @@ type UpdateAddressUseCaseResponse = Either<
     address: Address;
   }
 >;
-
+@Injectable()
 export class UpdateAddressUseCase {
   constructor(private addressRepository: AddressRepository) {}
 

@@ -3,6 +3,7 @@ import { Delivery, DeliveryStatus } from "../../enterprise/entities/delivery";
 import { DeliveryRepository } from "../repositories/delivery-repository";
 import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 import { NotAllowedError } from "@/core/errors/errors/not-allowed-error";
+import { Injectable } from "@nestjs/common";
 
 interface UpdateDeliveryToDeliveredUseCaseRequest {
   deliverymanId: string;
@@ -16,7 +17,7 @@ type UpdateDeliveryToDeliveredUseCaseResponse = Either<
     delivery: Delivery;
   }
 >;
-
+@Injectable()
 export class UpdateDeliveryToDeliveredUseCase {
   constructor(private deliveryRepository: DeliveryRepository) {}
 
