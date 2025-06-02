@@ -19,7 +19,7 @@ export class PrismaDeliveryMapper {
           ? new UniqueEntityID(raw.deliverymanId)
           : undefined,
         recipientId: new UniqueEntityID(raw.recipientId),
-        status: this.convertStatus(raw.status),
+        status: raw.status as DeliveryStatus,
         createdAt: raw.createdAt,
         deliveredAt: raw.deliveredAt ?? undefined,
         deliveryConfirmationUrl: raw.deliveryConfirmationUrl ?? undefined,
@@ -29,21 +29,6 @@ export class PrismaDeliveryMapper {
     );
   }
 
-  private static convertStatus(status: PrismaDeliveryStatus): DeliveryStatus {
-    switch (status) {
-      case "PENDING":
-        return DeliveryStatus.PENDING;
-      case "IN_PROGRESS":
-        return DeliveryStatus.IN_PROGRESS;
-      case "DELIVERED":
-        return DeliveryStatus.DELIVERED;
-      case "CANCELED":
-        return DeliveryStatus.CANCELED;
-      default:
-        throw new Error(`Invalid delivery status: ${status}`);
-    }
-  }
-
   static toPrisma(delivery: Delivery): Prisma.DeliveryUncheckedCreateInput {
     return {
       id: delivery.id.toString(),
@@ -51,28 +36,11 @@ export class PrismaDeliveryMapper {
       name: delivery.name,
       deliverymanId: delivery.deliverymanId?.toString(),
       recipientId: delivery.recipientId.toString(),
-      status: this.convertToPrismaStatus(delivery.status),
+      status: delivery.status as unknown as PrismaDeliveryStatus,
       createdAt: delivery.createdAt,
       deliveredAt: delivery.deliveredAt ?? null,
       deliveryConfirmationUrl: delivery.deliveryConfirmationUrl ?? null,
       pickedUpAt: delivery.pickedUpAt ?? null,
     };
-  }
-
-  private static convertToPrismaStatus(
-    status: DeliveryStatus
-  ): PrismaDeliveryStatus {
-    switch (status) {
-      case DeliveryStatus.PENDING:
-        return "PENDING";
-      case DeliveryStatus.IN_PROGRESS:
-        return "IN_PROGRESS";
-      case DeliveryStatus.DELIVERED:
-        return "DELIVERED";
-      case DeliveryStatus.CANCELED:
-        return "CANCELED";
-      default:
-        throw new Error(`Invalid delivery status: ${status}`);
-    }
   }
 }

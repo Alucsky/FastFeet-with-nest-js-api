@@ -16,8 +16,8 @@ export class PrismaUserMapper {
         name: raw.name,
         cpf: raw.cpf,
         password: raw.password,
-        userType: this.convertUserType(raw.userType),
-        role: this.convertUserType(raw.role as PrismaUserType),
+        userType: raw.userType as UserType,
+        role: raw.role as UserType,
       },
       new UniqueEntityID(raw.id)
     );
@@ -29,34 +29,8 @@ export class PrismaUserMapper {
       name: user.name,
       cpf: user.cpf,
       password: user.password,
-      userType: this.convertToPrismaUserType(user.userType),
-      role: this.convertToPrismaUserType(user.role),
+      userType: user.userType as PrismaUserType,
+      role: user.role as PrismaUserType,
     };
-  }
-
-  private static convertUserType(userType: PrismaUserType): UserType {
-    switch (userType) {
-      case "ADMIN":
-        return "admin";
-      case "RECIPIENT":
-        return "recipient";
-      case "DELIVERYMAN":
-        return "deliveryman";
-      default:
-        throw new Error(`Invalid UserType: ${userType}`);
-    }
-  }
-
-  private static convertToPrismaUserType(userType: UserType): PrismaUserType {
-    switch (userType) {
-      case "admin":
-        return "ADMIN";
-      case "recipient":
-        return "RECIPIENT";
-      case "deliveryman":
-        return "DELIVERYMAN";
-      default:
-        throw new Error(`Invalid UserType: ${userType}`);
-    }
   }
 }
