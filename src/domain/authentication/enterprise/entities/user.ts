@@ -1,7 +1,7 @@
 import { Entity } from "@/core/entities/entity";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 
-type UserType = "admin" | "recipient" | "deliveryman";
+export type UserType = "admin" | "recipient" | "deliveryman";
 
 export interface UserProps {
   name: string;

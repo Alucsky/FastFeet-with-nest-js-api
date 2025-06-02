@@ -2,23 +2,33 @@ import { UsersRepository } from "@/domain/authentication/application/repositorie
 import { User } from "@/domain/authentication/enterprise/entities/user";
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma.service";
+import { PrismaUserMapper } from "./mappers/prisma-user-mapper";
 
 @Injectable()
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private prisma: PrismaService) {}
-  findById(id: string): Promise<User | null> {
-    throw new Error("Method not implemented.");
+
+  async findById(id: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return PrismaUserMapper.toDomain(user);
   }
-  findByCpf(cpf: string): Promise<User | null> {
-    throw new Error("Method not implemented.");
-  }
-  create(user: User): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
-  update(user: User): Promise<User> {
-    throw new Error("Method not implemented.");
-  }
-  delete(userId: string): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async findByCpf(cpf: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { cpf },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return PrismaUserMapper.toDomain(user);
   }
 }
