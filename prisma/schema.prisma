@@ -54,16 +54,15 @@ model Address {
 }
 
 model Recipient {
-  id        String @id @default(uuid())
-  userId    String @unique
-  user      User   @relation(fields: [userId], references: [id])
-  addressId String @unique
-  address   Address @relation(fields: [addressId], references: [id])
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  addressId String?  @unique
+  address   Address? @relation(fields: [addressId], references: [id]) 
   
   deliveries Delivery[]
 
   @@map("recipients")
-
 }
 
 
@@ -85,6 +84,10 @@ model Delivery {
   status        DeliveryStatus @default(PENDING)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+  deliveredAt   DateTime?
+  pickedUpAt    DateTime? 
+  deliveryConfirmationUrl String?
+
 
   recipientId   String
   recipient     Recipient       @relation(fields: [recipientId], references: [id])
