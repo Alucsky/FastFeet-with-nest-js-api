@@ -5,15 +5,24 @@ import { PrismaRecipientRepository } from "./prisma/repositories/prisma-recipien
 import { PrismaDeliveryRepository } from "./prisma/repositories/prisma-delivery-repository";
 import { PrismaDeliverymanRepository } from "./prisma/repositories/prisma-deliveryman-repository";
 import { PrismaAddressRepository } from "./prisma/repositories/prisma-address-repository";
+import { UsersRepository } from "@/domain/authentication/application/repositories/users-repository";
+import { RecipientRepository } from "@/domain/recipients/application/repositories/recipient-repository";
+import { DeliverymanRepository } from "@/domain/deliveries/application/repositories/deliveryman-repository";
+import { DeliveryRepository } from "@/domain/deliveries/application/repositories/delivery-repository";
+import { AddressRepository } from "@/domain/recipients/application/repositories/address-repository";
 
 @Module({
   providers: [
     PrismaService,
-    PrismaUsersRepository,
-    PrismaRecipientRepository,
-    PrismaDeliveryRepository,
-    PrismaDeliverymanRepository,
-    PrismaAddressRepository,
+    {
+      provide: UsersRepository,
+      useClass: PrismaUsersRepository,
+    },
+    { provide: RecipientRepository, useClass: PrismaRecipientRepository },
+    { provide: DeliverymanRepository, useClass: PrismaDeliverymanRepository },
+    { provide: DeliveryRepository, useClass: PrismaDeliveryRepository },
+    { provide: DeliverymanRepository, useClass: PrismaDeliverymanRepository },
+    { provide: AddressRepository, useClass: PrismaAddressRepository },
   ],
   exports: [
     PrismaService,
