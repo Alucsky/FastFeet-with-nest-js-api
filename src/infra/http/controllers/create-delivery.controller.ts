@@ -7,42 +7,37 @@ import {
 } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
-import { CreateDeliverymanUseCase } from "@/domain/deliveries/application/use-cases/create-deliveryman";
+import { CreateDeliveryUseCase } from "@/domain/deliveries/application/use-cases/create-delivery";
 
-const createDeliverymanBodySchema = z.object({
-  cpf: z.string().min(11).max(11),
+const createDeliveryBodySchema = z.object({
   name: z.string(),
-  password: z.string(),
+  addressId: z.string(),
+  recipientId: z.string(),
 });
 
-type CreateDeliverymanBodySchema = z.infer<typeof createDeliverymanBodySchema>;
+type CreateDeliveryBodySchema = z.infer<typeof createDeliveryBodySchema>;
 
-const validationBodyPipe = new ZodValidationPipe(createDeliverymanBodySchema);
+const validationBodyPipe = new ZodValidationPipe(createDeliveryBodySchema);
 
-@Controller("/deliveryman")
-export class CreateDeliverymanController {
-  constructor(private createDeliverymanUseCase: CreateDeliverymanUseCase) {}
+@Controller("/delivery")
+export class CreateDeliveryController {
+  constructor(private createDeliveryUseCase: CreateDeliveryUseCase) {}
 
   @Post()
   @HttpCode(201)
-  async handle(@Body(validationBodyPipe) body: CreateDeliverymanBodySchema) {
-    const { cpf, name, password } = body;
+  async handle(@Body(validationBodyPipe) body: CreateDeliveryBodySchema) {
+    const { name, addressId, recipientId } = body;
 
-    const result = await this.createDeliverymanUseCase.execute({
-      cpf,
+    const result = await this.createDeliveryUseCase.execute({
       name,
-      password,
+      addressId,
+      recipientId,
     });
 
-    if (result.isLeft()) {
-      const error = result.value;
-      throw new BadRequestException(error.message);
-    }
-
-    const deliveryman = result.value;
+    const delivery = result.value;
 
     return {
-      deliveryman,
+      delivery,
     };
   }
 }
