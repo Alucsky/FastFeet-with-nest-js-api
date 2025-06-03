@@ -1,8 +1,7 @@
-import { InMemoryUsersRepository } from "test/repositories/in-memory-users-repository";
-
+import { makeDeliveryman } from "../../../../../test/factories/make-deliveryman";
+import { InMemorydeliverymanRepository } from "../../../../../test/repositories/in-memory-deliveryman-repository";
+import { InMemoryUsersRepository } from "../../../../../test/repositories/in-memory-users-repository";
 import { GetDeliverymanUseCase } from "./get-deliveryman";
-import { InMemorydeliverymanRepository } from "test/repositories/in-memory-deliveryman-repository";
-import { makeDeliveryman } from "test/factories/make-deliveryMan";
 import { UniqueEntityID } from "@/core/entities/unique-entity-id";
 
 let inMemoryUsersRepository: InMemoryUsersRepository;
