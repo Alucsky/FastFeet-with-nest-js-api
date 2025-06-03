@@ -7,7 +7,7 @@ import { Injectable } from "@nestjs/common";
 
 interface FetchRecentDeliveriesByDeliverymanUseCaseRequest {
   deliverymanId: string;
-  address?: {
+  address: {
     neighborhood?: string;
     city: string;
   };
