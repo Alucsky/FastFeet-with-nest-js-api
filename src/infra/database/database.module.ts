@@ -14,23 +14,19 @@ import { AddressRepository } from "@/domain/recipients/application/repositories/
 @Module({
   providers: [
     PrismaService,
-    {
-      provide: UsersRepository,
-      useClass: PrismaUsersRepository,
-    },
+    { provide: UsersRepository, useClass: PrismaUsersRepository },
     { provide: RecipientRepository, useClass: PrismaRecipientRepository },
     { provide: DeliverymanRepository, useClass: PrismaDeliverymanRepository },
     { provide: DeliveryRepository, useClass: PrismaDeliveryRepository },
-    { provide: DeliverymanRepository, useClass: PrismaDeliverymanRepository },
     { provide: AddressRepository, useClass: PrismaAddressRepository },
   ],
   exports: [
     PrismaService,
-    PrismaUsersRepository,
-    PrismaRecipientRepository,
-    PrismaDeliveryRepository,
-    PrismaDeliverymanRepository,
-    PrismaAddressRepository,
+    UsersRepository,
+    RecipientRepository,
+    DeliverymanRepository,
+    DeliveryRepository,
+    AddressRepository,
   ],
 })
 export class DatabaseModule {}
