@@ -1,4 +1,4 @@
-import { Controller, HttpCode, Body, Get } from "@nestjs/common";
+import { Controller, HttpCode, Body, Get, BadRequestException } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { GetDeliverymanUseCase } from "@/domain/deliveries/application/use-cases/get-deliveryman";
@@ -23,6 +23,10 @@ export class GetDeliverymanController {
     const result = await this.getDeliverymanUseCase.execute({
       deliverymanId,
     });
+
+    if (result.isLeft()) {
+      throw new BadRequestException();
+    }
 
     const deliveryman = result.value;
 
