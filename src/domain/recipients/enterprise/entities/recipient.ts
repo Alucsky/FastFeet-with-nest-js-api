@@ -5,6 +5,7 @@ export interface RecipientProps {
   name: string;
   cpf: string;
   addressId?: UniqueEntityID;
+  userId: UniqueEntityID;
 }
 
 export class Recipient extends Entity<RecipientProps> {
@@ -23,6 +24,11 @@ export class Recipient extends Entity<RecipientProps> {
   set setAddressId(addressId: UniqueEntityID | undefined) {
     this.props.addressId = addressId;
   }
+
+  get userId() {
+    return this.props.userId;
+  }
+  
 
   static create(props: RecipientProps, id?: UniqueEntityID) {
     return new Recipient(props, id);
