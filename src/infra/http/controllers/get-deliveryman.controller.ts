@@ -1,7 +1,14 @@
-import { Controller, HttpCode, Body, Get, BadRequestException } from "@nestjs/common";
+import {
+  Controller,
+  HttpCode,
+  Body,
+  Get,
+  BadRequestException,
+} from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { GetDeliverymanUseCase } from "@/domain/deliveries/application/use-cases/get-deliveryman";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 const getDeliverymanBodySchema = z.object({
   deliverymanId: z.string(),
@@ -25,7 +32,14 @@ export class GetDeliverymanController {
     });
 
     if (result.isLeft()) {
-      throw new BadRequestException();
+      const error = result.value;
+
+      switch (error.constructor) {
+        case ResourceNotFoundError:
+          throw new ResourceNotFoundError();
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
 
     const deliveryman = result.value;

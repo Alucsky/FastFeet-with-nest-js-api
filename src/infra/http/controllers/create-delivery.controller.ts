@@ -34,6 +34,11 @@ export class CreateDeliveryController {
       recipientId,
     });
 
+       if (result.isLeft()) {
+         throw new BadRequestException();
+       }
+
+
     const delivery = result.value;
 
     return {

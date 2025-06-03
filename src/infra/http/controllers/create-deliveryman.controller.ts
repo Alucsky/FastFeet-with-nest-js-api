@@ -34,10 +34,10 @@ export class CreateDeliverymanController {
       password,
     });
 
-    if (result.isLeft()) {
-      const error = result.value;
-      throw new BadRequestException(error.message);
-    }
+   if (result.isLeft()) {
+     throw new BadRequestException();
+   }
+
 
     const deliveryman = result.value;
 

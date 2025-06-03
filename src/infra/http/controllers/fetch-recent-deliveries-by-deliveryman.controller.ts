@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { FetchRecentDeliveriesByDeliverymanUseCase } from "@/domain/deliveries/application/use-cases/fetch-recent-deliveries-by-deliveryman";
 import { DeliveryStatus } from "@/domain/deliveries/enterprise/entities/delivery";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 const FetchRecentDeliveriesByDeliverymanQuerySchema = z.object({
   deliverymanId: z.string(),
@@ -46,7 +47,14 @@ export class FetchRecentDeliveriesByDeliverymanUseCaseController {
     );
 
     if (result.isLeft()) {
-      throw new BadRequestException();
+      const error = result.value;
+
+      switch (error.constructor) {
+        case ResourceNotFoundError:
+          throw new ResourceNotFoundError();
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
 
     const { deliveries } = result.value;

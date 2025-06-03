@@ -8,6 +8,7 @@ import {
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { UpdateDeliveryToInProgressUseCase } from "@/domain/deliveries/application/use-cases/update-delivery-to-in-progress";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 const updateDeliveryBodySchema = z.object({
   deliveryId: z.string(),
@@ -35,7 +36,14 @@ export class UpdateDeliveryToInProgressUseCaseController {
     });
 
     if (result.isLeft()) {
-      throw new BadRequestException();
+      const error = result.value;
+
+      switch (error.constructor) {
+        case ResourceNotFoundError:
+          throw new ResourceNotFoundError();
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
 
     const delivery = result.value;

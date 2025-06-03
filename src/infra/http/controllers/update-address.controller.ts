@@ -8,6 +8,7 @@ import {
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { UpdateAddressUseCase } from "@/domain/recipients/application/use-cases/update-address";
+import { ResourceNotFoundError } from "@/core/errors/errors/resource-not-found-error";
 
 const updateAddressBodySchema = z.object({
   addressId: z.string(),
@@ -44,7 +45,14 @@ export class UpdateAddressController {
     });
 
     if (result.isLeft()) {
-      throw new BadRequestException();
+      const error = result.value;
+
+      switch (error.constructor) {
+        case ResourceNotFoundError:
+          throw new ResourceNotFoundError();
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
 
     const address = result.value;

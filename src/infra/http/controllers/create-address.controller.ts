@@ -1,9 +1,4 @@
-import {
-  Controller,
-  HttpCode,
-  Post,
-  Body,
-} from "@nestjs/common";
+import { Controller, HttpCode, Post, Body, BadRequestException } from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { CreateAddressUseCase } from "@/domain/recipients/application/use-cases/create-address";
@@ -48,6 +43,10 @@ export class CreateAddressController {
       recipientId,
       street,
     });
+
+    if (result.isLeft()) {
+      throw new BadRequestException();
+    }
 
     const address = result.value;
 

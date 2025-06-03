@@ -35,9 +35,9 @@ export class CreateRecipientController {
     });
 
     if (result.isLeft()) {
-      const error = result.value;
-      throw new BadRequestException(error.message);
+      throw new BadRequestException();
     }
+
 
     const recipient = result.value;
 
