@@ -1,4 +1,10 @@
-import { Controller, HttpCode, Body, Patch, BadRequestException } from "@nestjs/common";
+import {
+  Controller,
+  HttpCode,
+  Body,
+  Patch,
+  BadRequestException,
+} from "@nestjs/common";
 import { z } from "zod";
 import { ZodValidationPipe } from "../pipes/zod-validation-pipe";
 import { UpdateDeliveryToDeliveredUseCase } from "@/domain/deliveries/application/use-cases/update-delivery-to-delivered";
@@ -13,7 +19,7 @@ type UpdateDeliveryBodySchema = z.infer<typeof updateDeliveryBodySchema>;
 
 const validationBodyPipe = new ZodValidationPipe(updateDeliveryBodySchema);
 
-@Controller("/delivery")
+@Controller("/delivery/to-delivered")
 export class UpdateDeliveryToDeliveredController {
   constructor(
     private updateDeliveryUseCase: UpdateDeliveryToDeliveredUseCase

@@ -18,7 +18,7 @@ type UpdateDeliveryBodySchema = z.infer<typeof updateDeliveryBodySchema>;
 
 const validationBodyPipe = new ZodValidationPipe(updateDeliveryBodySchema);
 
-@Controller("/delivery")
+@Controller("/delivery/in-progress")
 export class UpdateDeliveryToInProgressUseCaseController {
   constructor(
     private updateDeliveryUseCase: UpdateDeliveryToInProgressUseCase
